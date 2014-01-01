@@ -1,0 +1,8 @@
+{
+  "itemName" : "uniqueid",
+  "rarity" : "Common",
+  "inventoryIcon" : "default_icon.png",
+  "description" : "A consumable item in the inventory",
+  "shortdescription" : "Consumable name",
+  "emote" : ""
+}

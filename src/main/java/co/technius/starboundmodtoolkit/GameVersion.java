@@ -1,0 +1,34 @@
+package co.technius.starboundmodtoolkit;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+public enum GameVersion 
+{
+	BETA_ANGRY_KOALA("Beta v. Angry Koala");
+	private static ObservableList<String> versionStrings;
+	static
+	{
+		GameVersion[] v = values();
+		String[] gv = new String[v.length];
+		for(int i = 0; i < v.length; i ++)
+			gv[i] = v[i].name;
+		versionStrings = FXCollections.unmodifiableObservableList(
+				FXCollections.observableArrayList(gv));
+	}
+	private String name;
+	private GameVersion(String name)
+	{
+		this.name = name;
+	
+	}
+	public String toString()
+	{
+		return name;
+	}
+	
+	public static ObservableList<String> getVersionStrings()
+	{
+		return versionStrings;
+	}
+}

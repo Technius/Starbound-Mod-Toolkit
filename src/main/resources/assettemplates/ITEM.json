@@ -1,0 +1,7 @@
+{
+  "itemName" : "uniqueid",
+  "rarity" : "Common",
+  "inventoryIcon" : "default_icon.png",
+  "description" : "An item in the inventory",
+  "shortdescription" : "Item name"
+}

@@ -1,0 +1,11 @@
+{
+  "objectName" : "uniqueid",
+  "rarity" : "Common",
+  "category" : "decorative",
+  
+  "shortdescription" : "Object Name",
+  "description" : "A placeable, interactable object",
+  "race" : "generic",
+  
+  "inventoryIcon" : "default_icon.png"
+}
