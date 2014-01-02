@@ -39,4 +39,44 @@ public class JsonConstants
 			return name().toLowerCase();
 		}
 	}
+	
+	public enum CraftingGroups
+	{
+		ALL,
+		ANVIL,
+		ARMORS,
+		CHEST,
+		COMPRESSOR,
+		CONSUMABLE,
+		COOKING,
+		CRAFTINGTABLE,
+		DESSERT,
+		DOOR,
+		ENTREE,
+		FROGMERCHANT,
+		FURNITURE,
+		HEAD,
+		KITCHEN,
+		LEGS,
+		LIGHT,
+		MATERIALS,
+		METALWORKSTATION,
+		MOD,
+		OBJECTS,
+		OTHER,
+		PANTS,
+		PLAIN,
+		ROBOTICCRAFTINGTABLE,
+		SIDE,
+		SPINNINGWHEEL,
+		STONEFURNACE,
+		TOOLS,
+		WEAPONS,
+		WIRE;
+		
+		public String toString()
+		{
+			return name().toLowerCase();
+		}
+	}
 }

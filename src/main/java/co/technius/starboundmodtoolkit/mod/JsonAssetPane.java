@@ -33,7 +33,7 @@ import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
-public class JsonAssetPane extends AssetPane implements EventHandler<ActionEvent>
+public class JsonAssetPane extends AssetPane
 {
 	protected JsonAsset asset;
 	
@@ -75,8 +75,16 @@ public class JsonAssetPane extends AssetPane implements EventHandler<ActionEvent
 		buttons.setSpacing(5);
 		buttons.setPadding(new Insets(5));
 		
-		saveChanges.setOnAction(this);
-		cancel.setOnAction(this);
+		saveChanges.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event) {
+				save();
+			}
+		});
+		cancel.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event) {
+				load();
+			}
+		});
 	}
 	
 	public void init()
@@ -89,7 +97,7 @@ public class JsonAssetPane extends AssetPane implements EventHandler<ActionEvent
 		getTabs().add(json);
 	}
 	
-	public void load()
+	public final void load()
 	{
 		Class<?> clazz = getClass();
 		while(clazz != JsonAssetPane.class)
@@ -97,9 +105,10 @@ public class JsonAssetPane extends AssetPane implements EventHandler<ActionEvent
 			loadForClass(clazz);
 			clazz = clazz.getSuperclass();
 		}
+		loadCustom();
 	}
 	
-	public void save()
+	public final void save()
 	{
 		Class<?> clazz = getClass();
 		while(clazz != JsonAssetPane.class)
@@ -107,6 +116,17 @@ public class JsonAssetPane extends AssetPane implements EventHandler<ActionEvent
 			saveForClass(clazz);
 			clazz = clazz.getSuperclass();
 		}
+		saveCustom();
+	}
+	
+	protected void loadCustom()
+	{
+		
+	}
+	
+	protected void saveCustom()
+	{
+		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -324,13 +344,5 @@ public class JsonAssetPane extends AssetPane implements EventHandler<ActionEvent
 			base = (JsonObject)val;
 		}
 		return base;
-	}
-	
-	public void handle(ActionEvent event)
-	{
-		if(event.getSource() == saveChanges)
-			save();
-		else if(event.getSource() == cancel)
-			load();
 	}
 }

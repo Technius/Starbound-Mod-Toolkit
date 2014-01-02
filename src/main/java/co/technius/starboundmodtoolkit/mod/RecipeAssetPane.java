@@ -6,7 +6,11 @@ import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -14,17 +18,25 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import co.technius.starboundmodtoolkit.JsonConstants.CraftingGroups;
 import co.technius.starboundmodtoolkit.ModToolkit;
 import co.technius.starboundmodtoolkit.mod.JsonObjectBinding.Type;
 import co.technius.starboundmodtoolkit.utilui.FormPane;
 
-public class RecipeAssetPane extends JsonAssetPane
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonValue;
+
+public class RecipeAssetPane extends JsonAssetPane implements EventHandler<ActionEvent>
 {
 	@SuppressWarnings("rawtypes")
 	@JsonObjectBinding(key = "input", type = Type.ARRAY,
@@ -40,10 +52,20 @@ public class RecipeAssetPane extends JsonAssetPane
 	@JsonObjectBinding(base = {"output"}, key = "count", type = Type.INTEGER, required = true)
 	TextField outputAmount = new TextField();
 	
+	ListView<CraftingGroups> groups = new ListView<CraftingGroups>();
+	
 	TextField addIdField = new TextField();
 	TextField addAmountField = new TextField();
 	Button addButton = new Button("Add Ingredient");
 	Button deleteButton = new Button("Delete Ingredient");
+	
+	ComboBox<CraftingGroups> addGroupsBox = new ComboBox<CraftingGroups>();
+	Button addGroupButton = new Button("Add Group");
+	Button removeGroupButton = new Button("Remove Selected Group");
+	MenuItem removeGroupContext = new MenuItem("Remove");
+	ObservableList<CraftingGroups> unusedGroups = 
+			FXCollections.observableArrayList(CraftingGroups.values());
+	ObservableList<CraftingGroups> usedGroups = FXCollections.observableArrayList();
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public RecipeAssetPane(JsonAsset asset) 
@@ -82,35 +104,8 @@ public class RecipeAssetPane extends JsonAssetPane
 		
 		addIdField.setPromptText("Item ID");
 		addAmountField.setPromptText("Amount");
-		addButton.setOnAction(new EventHandler<ActionEvent>(){
-			public void handle(ActionEvent arg0) 
-			{
-				try
-				{
-					ObservableMap m = FXCollections.observableHashMap();
-					ModToolkit.log.info(addIdField.getText() + "," + addAmountField.getText());
-					m.put("item", addIdField.getText());
-					m.put("count", Integer.parseInt(addAmountField.getText()));
-					ModToolkit.log.info(m.get("item").toString());
-					input.getItems().add(m);
-					for(ObservableMap map:input.getItems())
-					{
-						ModToolkit.log.info(map.get("item") + "," + map.get("count"));
-					}
-				}
-				catch(NumberFormatException nfe)
-				{
-					nfe.printStackTrace();
-				}
-			}
-		});
-		deleteButton.setOnAction(new EventHandler<ActionEvent>(){
-			public void handle(ActionEvent event)
-			{
-				ObservableMap m = input.getSelectionModel().getSelectedItem();
-				if(m != null)input.getItems().remove(m);
-			}
-		});
+		addButton.setOnAction(this);
+		deleteButton.setOnAction(this);
 		
 		inputForm.add(input);
 		inputForm.add(addIdField, addAmountField, addButton);
@@ -140,6 +135,74 @@ public class RecipeAssetPane extends JsonAssetPane
 		Label warnLabel = new Label("");
 		AssetPaneUtils.addWholeNumberListener(warnLabel, outputAmount, enable);
 		form.add(warnLabel);
+		
+		addGroupsBox.setItems(unusedGroups);
+		groups.setItems(usedGroups);
+		addGroupButton.setOnAction(this);
+		removeGroupButton.setOnAction(this);
+		
+		BorderPane groupForm = new BorderPane();
+		HBox groupButtons = new HBox();
+		TitledPane groupsPane = new TitledPane("Crafting Groups", groupForm);
+		
+		groupForm.setCenter(groups);
+		groupButtons.getChildren().addAll(addGroupsBox, addGroupButton, removeGroupButton);
+		groupForm.setBottom(groupButtons);
+		
+		form.add(groupsPane);
+		GridPane.setHgrow(groupsPane, Priority.ALWAYS);
+		GridPane.setColumnSpan(groupsPane, 4);
+		GridPane.setColumnSpan(groups, 4);
+		
+		final ContextMenu context = new ContextMenu();
+		removeGroupContext.setOnAction(this);
+		context.getItems().add(removeGroupContext);
+		groups.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent event) 
+			{
+				if(event.getButton() == MouseButton.SECONDARY &&
+					!groups.getSelectionModel().isEmpty())
+				{
+					context.show(groups, event.getScreenX(), event.getScreenY());
+				}
+			}
+		});
+	}
+	
+	public void loadCustom()
+	{
+		usedGroups.clear();
+		unusedGroups.setAll(CraftingGroups.values());
+		JsonValue jGroups = asset.object.get("groups");
+		if(jGroups != null && jGroups.isArray())
+		{
+			for(JsonValue v: (JsonArray) jGroups)
+			{
+				if(v.isString())
+				{
+					try
+					{
+						CraftingGroups g = CraftingGroups.valueOf(v.asString().toUpperCase());
+						usedGroups.add(g);
+						unusedGroups.remove(g);
+					}
+					catch(IllegalArgumentException iae)
+					{
+						ModToolkit.log.info("Invalid/unknown group: " + v.asString());
+					}
+				}
+			}
+		}
+	}
+	
+	public void saveCustom()
+	{
+		JsonValue jGroupsVal = asset.object.get("groups");
+		JsonArray jGroups = (jGroupsVal == null || !jGroupsVal.isArray()) ?
+			new JsonArray() : (JsonArray) jGroupsVal;
+		asset.object.set("groups", jGroups);
+		for(CraftingGroups g: usedGroups)
+			jGroups.add(g.toString());
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -195,6 +258,51 @@ public class RecipeAssetPane extends JsonAssetPane
 		{
 			Integer nV = val >= 0 ? val : getItem();
 			super.commitEdit(nV);
+		}
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void handle(ActionEvent event)
+	{
+		if(event.getSource() == addButton)
+		{
+			try
+			{
+				ObservableMap m = FXCollections.observableHashMap();
+				ModToolkit.log.info(addIdField.getText() + "," + addAmountField.getText());
+				m.put("item", addIdField.getText());
+				m.put("count", Integer.parseInt(addAmountField.getText()));
+				ModToolkit.log.info(m.get("item").toString());
+				input.getItems().add(m);
+			}
+			catch(NumberFormatException nfe)
+			{
+				nfe.printStackTrace();
+			}
+		}
+		else if(event.getSource() == deleteButton)
+		{
+			ObservableMap m = input.getSelectionModel().getSelectedItem();
+			if(m != null)input.getItems().remove(m);
+		}
+		else if(event.getSource() == addGroupButton)
+		{
+			CraftingGroups g = addGroupsBox.getSelectionModel().getSelectedItem();
+			if(g != null)
+			{
+				unusedGroups.remove(g);
+				usedGroups.add(g);
+			}
+		}
+		else if(event.getSource() == removeGroupButton || event.getSource() == removeGroupContext)
+		{
+			CraftingGroups g = groups.getSelectionModel().getSelectedItem();
+			if(g != null && usedGroups.size() > 1)
+			{
+				usedGroups.remove(g);
+				unusedGroups.add(0, g);
+				addGroupsBox.getSelectionModel().selectFirst();
+			}
 		}
 	}
 }
