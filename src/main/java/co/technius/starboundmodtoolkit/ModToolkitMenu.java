@@ -118,6 +118,7 @@ public class ModToolkitMenu extends MenuBar implements EventHandler<ActionEvent>
 		else if(event.getSource() == about)
 		{
 			String message = "Starbound Mod Toolkit version " + ModToolkit.version + Util.newLine +
+				"Mod Toolkit created by Technius" + Util.newLine + Util.newLine +
 				"Starbound is a trademark of Chucklefish LTD.";
 			MessageDialog.showMessageDialog(main.stage, message);
 		}
