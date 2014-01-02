@@ -22,6 +22,7 @@ public class ConsumableAssetPane extends ItemAssetPane
 	@Override
 	public void loadCustom()
 	{
+		super.loadCustom();
 		JsonValue emoteVal = asset.object.get("emote");
 		if(emoteVal != null && emoteVal.isString())
 		{

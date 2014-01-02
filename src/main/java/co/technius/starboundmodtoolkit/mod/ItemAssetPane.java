@@ -7,6 +7,8 @@ import javafx.scene.control.TextField;
 import co.technius.starboundmodtoolkit.JsonConstants.Rarity;
 import co.technius.starboundmodtoolkit.mod.JsonObjectBinding.Type;
 
+import com.eclipsesource.json.JsonValue;
+
 public class ItemAssetPane extends JsonAssetPane
 {
 	@JsonObjectBinding(key = "itemName", type = Type.STRING, required = true)
@@ -32,5 +34,20 @@ public class ItemAssetPane extends JsonAssetPane
 		form.add("Rarity", rarity, new Label("Required"));
 		form.add("Description", description);
 		form.add("Inventory Icon", inventoryIcon, new Label("Required"));
+	}
+	
+	public void loadCustom()
+	{
+		JsonValue rarityVal = asset.object.get("rarity");
+		if(rarityVal != null && rarityVal.isString())
+		{
+			String rarity = rarityVal.asString();
+			for(Rarity r: Rarity.values())
+			{
+				if(r.toString().equals(rarity))
+					this.rarity.getSelectionModel().select(r);
+			}
+		}
+		else rarity.getSelectionModel().clearSelection();
 	}
 }

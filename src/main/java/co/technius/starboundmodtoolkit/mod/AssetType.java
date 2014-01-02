@@ -65,6 +65,7 @@ public enum AssetType
 	TREASUREPOOLS("treasurepools", true),
 	QUESTTEMPLATE("questtemplate", true),
 	STRUCTURE("structure", true),
+	CELESTIAL("celestial", true),
 	SPECIES("species", true),
 	WEATHER("weather", true),
 	SAPLING("sapling", true),
