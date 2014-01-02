@@ -20,12 +20,10 @@ import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import co.technius.starboundmodtoolkit.JsonConstants.CraftingGroups;
@@ -107,21 +105,14 @@ public class RecipeAssetPane extends JsonAssetPane implements EventHandler<Actio
 		addButton.setOnAction(this);
 		deleteButton.setOnAction(this);
 		
-		inputForm.add(input);
 		inputForm.add(addIdField, addAmountField, addButton);
 		inputForm.add(deleteButton);
 		
-		AnchorPane inputWrapper = new AnchorPane();
-		AnchorPane.setTopAnchor(input, 0d);
-		AnchorPane.setLeftAnchor(input, 0d);
-		AnchorPane.setRightAnchor(input, 0d);
+		BorderPane inputWrapper = new BorderPane();
+		inputWrapper.setCenter(input);
+		inputWrapper.setBottom(inputForm);
 		
-		inputWrapper.getChildren().addAll(input);
-		
-		VBox iW2 = new VBox();
-		iW2.getChildren().addAll(inputWrapper, inputForm);
-		
-		TitledPane inputPane = new TitledPane("Ingredients", iW2);		
+		TitledPane inputPane = new TitledPane("Ingredients", inputWrapper);		
 		GridPane.setColumnSpan(inputPane, 4);
 		GridPane.setHgrow(inputPane, Priority.ALWAYS);
 		GridPane.setColumnSpan(input, 4);
