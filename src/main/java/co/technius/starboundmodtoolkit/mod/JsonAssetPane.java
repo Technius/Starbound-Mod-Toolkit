@@ -99,24 +99,43 @@ public class JsonAssetPane extends AssetPane
 	
 	public final void load()
 	{
-		Class<?> clazz = getClass();
-		while(clazz != JsonAssetPane.class)
+		try
 		{
-			loadForClass(clazz);
-			clazz = clazz.getSuperclass();
+			Class<?> clazz = getClass();
+			while(clazz != JsonAssetPane.class)
+			{
+				loadForClass(clazz);
+				clazz = clazz.getSuperclass();
+			}
+			loadCustom();
 		}
-		loadCustom();
+		catch(Throwable t)
+		{
+			Util.handleError(t, "An error occurred while loading asset data", 
+				"Failed to load JsonObject");
+		}
+		jsonPane.loadJson(asset.object);
 	}
 	
 	public final void save()
 	{
-		Class<?> clazz = getClass();
-		while(clazz != JsonAssetPane.class)
+		try
 		{
-			saveForClass(clazz);
-			clazz = clazz.getSuperclass();
+			Class<?> clazz = getClass();
+			while(clazz != JsonAssetPane.class)
+			{
+				saveForClass(clazz);
+				clazz = clazz.getSuperclass();
+			}
+			saveCustom();
+			asset.save();
 		}
-		saveCustom();
+		catch(Throwable t)
+		{
+			Util.handleError(t, "An error occurred while editing asset data", 
+				"Failed to modify JsonObject");
+		}
+		jsonPane.loadJson(asset.object);
 	}
 	
 	protected void loadCustom()
@@ -130,182 +149,163 @@ public class JsonAssetPane extends AssetPane
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void loadForClass(Class<?> clazz)
+	private void loadForClass(Class<?> clazz) throws Throwable
 	{
-		try
+		for(Field f: clazz.getDeclaredFields())
 		{
-			for(Field f: clazz.getDeclaredFields())
+			f.setAccessible(true);
+			Annotation a = f.getAnnotation(JsonObjectBinding.class);
+			if(a == null)continue;
+			JsonObjectBinding b = (JsonObjectBinding) a;
+			String key = b.key();
+			JsonObject base = getJsonFromBinding(b, false);
+			if(base == null)
 			{
-				f.setAccessible(true);
-				Annotation a = f.getAnnotation(JsonObjectBinding.class);
-				if(a == null)continue;
-				JsonObjectBinding b = (JsonObjectBinding) a;
-				String key = b.key();
-				JsonObject base = getJsonFromBinding(b, false);
-				if(base == null)
+				if(b.required())throw new IllegalArgumentException("Invalid " 
+					+ asset.type.toString() + " file");
+				continue;
+			}
+			JsonValue val = base.get(key);
+			if(val == null)
+			{
+				if(b.required())
+					throw new IllegalArgumentException(asset.type.toString() + " file missing "
+						+ "required key: " + key);
+				continue;
+			}
+			Object obj = f.get(this);
+			if(obj instanceof TextInputControl)
+			{
+				String s;
+				switch(b.type())
 				{
-					if(b.required())throw new IllegalArgumentException("Invalid " 
-						+ asset.type.toString() + " file");
-					continue;
+				case STRING: s = val.asString(); break;
+				case INTEGER:
+					if(val.isNumber())
+						s = Integer.toString(val.asInt()); 
+					else if(val.isString())
+						Integer.parseInt((s = val.asString()));
+					else throw new UnsupportedOperationException(
+						"Not an integer: " + val.toString());
+					break;
+				case DOUBLE: s = Double.toString(val.asDouble()); break;
+				default: throw new UnsupportedOperationException(
+					"TextInput does not support type " + b.type().name());
 				}
-				JsonValue val = base.get(key);
-				if(val == null)
+				((TextInputControl)obj).setText(s);
+			}
+			else if(obj instanceof CheckBox)
+			{
+				validateType(key, val, Type.BOOLEAN);
+				((CheckBox)obj).setSelected(base.get(key).asBoolean());
+			}
+			else if(obj instanceof ComboBox)
+			{
+				validateType(key, val, Type.STRING);
+				ComboBox<?> cbox = (ComboBox<?>) obj;
+				try
 				{
-					if(b.required())
-						throw new IllegalArgumentException(asset.type.toString() + " file missing "
-							+ "required key: " + key);
-					continue;
-				}
-				Object obj = f.get(this);
-				if(obj instanceof TextInputControl)
-				{
-					String s;
-					switch(b.type())
+					ObservableList<?> items = cbox.getItems();
+					for(int i = 0; i < items.size(); i ++)
 					{
-					case STRING: s = val.asString(); break;
-					case INTEGER:
-						if(val.isNumber())
-							s = Integer.toString(val.asInt()); 
-						else if(val.isString())
-							Integer.parseInt((s = val.asString()));
-						else throw new UnsupportedOperationException(
-							"Not an integer: " + val.toString());
-						break;
-					case DOUBLE: s = Double.toString(val.asDouble()); break;
-					default: throw new UnsupportedOperationException(
-						"TextInput does not support type " + b.type().name());
-					}
-					((TextInputControl)obj).setText(s);
-				}
-				else if(obj instanceof CheckBox)
-				{
-					validateType(key, val, Type.BOOLEAN);
-					((CheckBox)obj).setSelected(base.get(key).asBoolean());
-				}
-				else if(obj instanceof ComboBox)
-				{
-					validateType(key, val, Type.STRING);
-					ComboBox<?> cbox = (ComboBox<?>) obj;
-					try
-					{
-						ObservableList<?> items = cbox.getItems();
-						for(int i = 0; i < items.size(); i ++)
-						{
-							Object o = items.get(i);
-							if(o.toString().equals(val))
-								cbox.getSelectionModel().select(i);
-						}
-					}
-					catch(IllegalArgumentException iae)
-					{
-						cbox.getSelectionModel().selectFirst();
+						Object o = items.get(i);
+						if(o.toString().equals(val))
+							cbox.getSelectionModel().select(i);
 					}
 				}
-				else if(obj instanceof TableView)
+				catch(IllegalArgumentException iae)
 				{
-					@SuppressWarnings("rawtypes")
-					TableView v = (TableView) obj;
-					v.getItems().clear();
-					validateType(key, val, Type.ARRAY);
-					for(JsonValue m : ((JsonArray)val))
-					{
-						if(m.isObject())
-						{
-							Map<String, Object> row = FXCollections.observableHashMap();
-							JsonObject mo = m.asObject();
-							for(String k: b.keyBinding())
-							{
-								row.put(k, Util.getValue(mo.get(k)));
-							}
-							v.getItems().add(row);
-						}
-					}
-					@SuppressWarnings("rawtypes")
-					ObservableList<TableColumn> columns = FXCollections.observableArrayList();
-					columns.addAll(v.getColumns());
-					v.getColumns().clear();
-					v.getColumns().setAll(columns);
-					v.requestLayout();
+					cbox.getSelectionModel().selectFirst();
 				}
 			}
-		}
-		catch(Throwable t)
-		{
-			Util.handleError(t, "An error occurred while editing asset data", 
-				"Failed to modify JsonObject");
-		}
-		jsonPane.loadJson(asset.object);
-	}
-	
-	private void saveForClass(Class<?> clazz)
-	{
-		try
-		{
-			for(Field f: clazz.getDeclaredFields())
+			else if(obj instanceof TableView)
 			{
-				f.setAccessible(true);
-				Annotation a = f.getAnnotation(JsonObjectBinding.class);
-				if(a == null)continue;
-				JsonObjectBinding b = (JsonObjectBinding) a;
-				String key = b.key();
-				JsonObject base = getJsonFromBinding(b, true);
-				assert base != null;
-				Object obj = f.get(this);
-				if(obj instanceof TextInputControl)
+				@SuppressWarnings("rawtypes")
+				TableView v = (TableView) obj;
+				v.getItems().clear();
+				validateType(key, val, Type.ARRAY);
+				for(JsonValue m : ((JsonArray)val))
 				{
-					String data = ((TextInputControl) obj).getText();
-					switch(b.type())
+					if(m.isObject())
 					{
-					case STRING: 
-						if(b.required() || !data.trim().isEmpty())
-							base.set(key, data); 
-						else base.remove(key);
-						break;
-					case INTEGER: base.set(key, Integer.parseInt(data)); break;
-					case DOUBLE: base.set(key, Double.parseDouble(data)); break;
-					case BOOLEAN: base.set(key, Boolean.parseBoolean(data)); break;
-					default: throw new UnsupportedOperationException(
-						"TextInput does not support type " + b.type().name());
-					}
-				}
-				else if(obj instanceof CheckBox)
-				{
-					checkType(Type.BOOLEAN, b.type(), CheckBox.class);
-					base.set(key, ((CheckBox)obj).isSelected());
-				}
-				else if(obj instanceof ComboBox)
-				{
-					checkType(Type.STRING, b.type(), ComboBox.class);
-					base.set(key, ((ComboBox<?>)obj).getSelectionModel()
-						.getSelectedItem().toString());
-				}
-				else if(obj instanceof TableView)
-				{
-					JsonArray ar = new JsonArray();
-					@SuppressWarnings({ "rawtypes", "unchecked" })
-					ObservableList<Map> ob = ((TableView)obj).getItems();
-					for(@SuppressWarnings("rawtypes") Map m: ob)
-					{
-						JsonObject no = new JsonObject();
+						Map<String, Object> row = FXCollections.observableHashMap();
+						JsonObject mo = m.asObject();
 						for(String k: b.keyBinding())
 						{
-							JsonValue v = Util.getValue(m.get(k));
-							ModToolkit.log.info(v.toString());
-							no.set(k, v);
+							row.put(k, Util.getValue(mo.get(k)));
 						}
-						ar.add(no);
+						v.getItems().add(row);
 					}
-					base.set(key, ar);
+				}
+				@SuppressWarnings("rawtypes")
+				ObservableList<TableColumn> columns = FXCollections.observableArrayList();
+				columns.addAll(v.getColumns());
+				v.getColumns().clear();
+				v.getColumns().setAll(columns);
+				v.requestLayout();
+			}
+		}
+	}
+	
+	private void saveForClass(Class<?> clazz) throws Throwable
+	{
+		for(Field f: clazz.getDeclaredFields())
+		{
+			f.setAccessible(true);
+			Annotation a = f.getAnnotation(JsonObjectBinding.class);
+			if(a == null)continue;
+			JsonObjectBinding b = (JsonObjectBinding) a;
+			String key = b.key();
+			JsonObject base = getJsonFromBinding(b, true);
+			assert base != null;
+			Object obj = f.get(this);
+			if(obj instanceof TextInputControl)
+			{
+				String data = ((TextInputControl) obj).getText();
+				switch(b.type())
+				{
+				case STRING: 
+					if(b.required() || !data.trim().isEmpty())
+						base.set(key, data); 
+					else base.remove(key);
+					break;
+				case INTEGER: base.set(key, Integer.parseInt(data)); break;
+				case DOUBLE: base.set(key, Double.parseDouble(data)); break;
+				case BOOLEAN: base.set(key, Boolean.parseBoolean(data)); break;
+				default: throw new UnsupportedOperationException(
+					"TextInput does not support type " + b.type().name());
 				}
 			}
-			asset.save();
+			else if(obj instanceof CheckBox)
+			{
+				checkType(Type.BOOLEAN, b.type(), CheckBox.class);
+				base.set(key, ((CheckBox)obj).isSelected());
+			}
+			else if(obj instanceof ComboBox)
+			{
+				checkType(Type.STRING, b.type(), ComboBox.class);
+				base.set(key, ((ComboBox<?>)obj).getSelectionModel()
+					.getSelectedItem().toString());
+			}
+			else if(obj instanceof TableView)
+			{
+				JsonArray ar = new JsonArray();
+				@SuppressWarnings({ "rawtypes", "unchecked" })
+				ObservableList<Map> ob = ((TableView)obj).getItems();
+				for(@SuppressWarnings("rawtypes") Map m: ob)
+				{
+					JsonObject no = new JsonObject();
+					for(String k: b.keyBinding())
+					{
+						JsonValue v = Util.getValue(m.get(k));
+						ModToolkit.log.info(v.toString());
+						no.set(k, v);
+					}
+					ar.add(no);
+				}
+				base.set(key, ar);
+			}
 		}
-		catch(Throwable t)
-		{
-			Util.handleError(t, "An error occurred while editing asset data", 
-				"Failed to modify JsonObject");
-		}
-		jsonPane.loadJson(asset.object);
 	}
 	
 	private void checkType(Type wanted, Type given, Class<?> c)

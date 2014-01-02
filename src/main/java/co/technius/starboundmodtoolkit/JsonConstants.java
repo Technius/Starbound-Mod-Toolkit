@@ -56,6 +56,7 @@ public class JsonConstants
 		FROGMERCHANT,
 		FURNITURE,
 		HEAD,
+		HOLIDAYCRAFTINGTABLE,
 		KITCHEN,
 		LEGS,
 		LIGHT,
@@ -66,13 +67,16 @@ public class JsonConstants
 		OTHER,
 		PANTS,
 		PLAIN,
+		REFINERY,
 		ROBOTICCRAFTINGTABLE,
 		SIDE,
 		SPINNINGWHEEL,
 		STONEFURNACE,
+		STORAGE,
 		TOOLS,
 		WEAPONS,
-		WIRE;
+		WIRE,
+		WIRINGSTATION;
 		
 		public String toString()
 		{

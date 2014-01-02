@@ -146,6 +146,7 @@ public class RecipeAssetPane extends JsonAssetPane implements EventHandler<Actio
 		TitledPane groupsPane = new TitledPane("Crafting Groups", groupForm);
 		
 		groupForm.setCenter(groups);
+		groupButtons.setSpacing(5);
 		groupButtons.getChildren().addAll(addGroupsBox, addGroupButton, removeGroupButton);
 		groupForm.setBottom(groupButtons);
 		
@@ -169,6 +170,7 @@ public class RecipeAssetPane extends JsonAssetPane implements EventHandler<Actio
 		});
 	}
 	
+	@Override
 	public void loadCustom()
 	{
 		usedGroups.clear();
@@ -193,16 +195,19 @@ public class RecipeAssetPane extends JsonAssetPane implements EventHandler<Actio
 				}
 			}
 		}
+		addGroupsBox.getSelectionModel().selectFirst();
 	}
 	
+	@Override
 	public void saveCustom()
 	{
-		JsonValue jGroupsVal = asset.object.get("groups");
-		JsonArray jGroups = (jGroupsVal == null || !jGroupsVal.isArray()) ?
-			new JsonArray() : (JsonArray) jGroupsVal;
-		asset.object.set("groups", jGroups);
+		JsonArray jGroups = new JsonArray();
 		for(CraftingGroups g: usedGroups)
+		{
+			ModToolkit.log.info(g.toString());
 			jGroups.add(g.toString());
+		}
+		asset.object.set("groups", jGroups);
 	}
 	
 	@SuppressWarnings("rawtypes")
