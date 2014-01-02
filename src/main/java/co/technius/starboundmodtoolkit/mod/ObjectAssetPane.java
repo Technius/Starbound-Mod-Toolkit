@@ -32,6 +32,9 @@ public class ObjectAssetPane extends JsonAssetPane
 	@JsonObjectBinding(key = "price", type = Type.INTEGER)
 	public TextField price = new TextField("0");
 	
+	@JsonObjectBinding(key = "inventoryIcon", type = Type.STRING, required = true)
+	public TextField inventoryIcon = AssetPaneUtils.noEmptyTextField(enable);
+	
 	public Accordion speciesDescriptions = new Accordion();
 	
 	@JsonObjectBinding(key = "apexDescription", type = Type.STRING)
@@ -64,6 +67,7 @@ public class ObjectAssetPane extends JsonAssetPane
 		AssetPaneUtils.addWholeNumberListener(priceValidity, price, enable).acceptNegative = false;
 		form.add("Price", price);
 		form.add(priceValidity);
+		form.add("Inventory Icon", inventoryIcon, new Label("Required"));
 		TitledPane[] speciesDescPanes = {
 			new TitledPane("Apex Description", apexDescription),
 			new TitledPane("Avian Description", avianDescription),

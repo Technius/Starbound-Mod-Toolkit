@@ -21,6 +21,9 @@ public class ItemAssetPane extends JsonAssetPane
 	@JsonObjectBinding(key = "rarity", type = Type.STRING, required = true)
 	public ComboBox<Rarity> rarity = AssetPaneUtils.rarityBox();
 	
+	@JsonObjectBinding(key = "inventoryIcon", type = Type.STRING, required = true)
+	public TextField inventoryIcon = AssetPaneUtils.noEmptyTextField(enable);
+	
 	public ItemAssetPane(JsonAsset asset)
 	{
 		super(asset);
@@ -28,5 +31,6 @@ public class ItemAssetPane extends JsonAssetPane
 		form.add("Item Name", itemName, new Label("Required"));
 		form.add("Rarity", rarity, new Label("Required"));
 		form.add("Description", description);
+		form.add("Inventory Icon", inventoryIcon, new Label("Required"));
 	}
 }
