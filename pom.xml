@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>co.technius</groupId>
   <artifactId>StarboundModToolkit</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2-SNAPSHOT</version>
   <name>Starbound Mod Toolkit</name>
   <description>A tool used for creating modifications (mods) for Starbound</description>
   
