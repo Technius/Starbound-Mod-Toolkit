@@ -262,13 +262,14 @@ public class JsonAssetPane extends AssetPane
 			if(obj instanceof TextInputControl)
 			{
 				String data = ((TextInputControl) obj).getText();
+				if(!b.required() && data.trim().isEmpty())
+				{
+					base.remove(key);
+					continue;
+				}
 				switch(b.type())
 				{
-				case STRING: 
-					if(b.required() || !data.trim().isEmpty())
-						base.set(key, data); 
-					else base.remove(key);
-					break;
+				case STRING: base.set(key, data); break;
 				case INTEGER: base.set(key, Integer.parseInt(data)); break;
 				case DOUBLE: base.set(key, Double.parseDouble(data)); break;
 				case BOOLEAN: base.set(key, Boolean.parseBoolean(data)); break;
