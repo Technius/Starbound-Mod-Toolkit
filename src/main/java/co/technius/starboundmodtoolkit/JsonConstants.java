@@ -83,4 +83,21 @@ public class JsonConstants
 			return name().toLowerCase();
 		}
 	}
+	
+	public enum Race
+	{
+		GENERIC,
+		APEX,
+		AVIAN,
+		FLORAN,
+		GLITCH,
+		HUMAN,
+		HYLOTL,
+		CUSTOM;
+		
+		public String toString()
+		{
+			return name().toLowerCase();
+		}
+	}
 }

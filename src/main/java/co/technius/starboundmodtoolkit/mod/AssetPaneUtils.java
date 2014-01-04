@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
+import co.technius.starboundmodtoolkit.JsonConstants.Race;
 import co.technius.starboundmodtoolkit.JsonConstants.Rarity;
 import co.technius.starboundmodtoolkit.util.AndBoolean;
 import co.technius.starboundmodtoolkit.utilui.EmptyTextFieldListener;
@@ -19,6 +20,14 @@ public class AssetPaneUtils
 				new ComboBox<Rarity>(FXCollections.observableArrayList(Rarity.values()));
 		rarity.getSelectionModel().selectFirst();
 		return rarity;
+	}
+	
+	public static ComboBox<Race> raceBox()
+	{
+		ComboBox<Race> race = 
+				new ComboBox<Race>(FXCollections.observableArrayList(Race.values()));
+		race.getSelectionModel().selectFirst();
+		return race;
 	}
 	
 	public static TextArea noLinesTextArea()
