@@ -90,6 +90,7 @@ public class JsonAssetPane extends AssetPane
 	public void init()
 	{
 		jsonPane = new JsonPane();
+		jsonPane.jap = this;
 		asset = (JsonAsset) super.asset;
 		Tab json = new Tab("Raw JSON");
 		jsonPane.loadJson(asset.object);
