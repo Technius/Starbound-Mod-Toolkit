@@ -1,0 +1,10 @@
+{
+  "itemName" : "uniqueidmaterial",
+  "rarity" : "Common",
+  "inventoryIcon" : "materialicon.png",
+  "dropCollision" : [-2.5, -2.0, 2.5, 2.0],
+  "description" : "A placeable block, as an item.",
+  "shortdescription" : "Block name",
+  "category" : "Material",
+  "materialId" : 999
+}

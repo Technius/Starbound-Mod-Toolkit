@@ -1,0 +1,12 @@
+{
+  "materialId" : 999,
+  "materialName" : "uniqueid",
+  "frames" : "materialframes.png",
+  "particleColor" : [0, 0, 0, 255],
+  "variants" : 5,
+  "itemDrop" : "uniqueidmaterial",
+  "shortdescription" : "Block name",
+  "description" : "A block that can be placed.",
+  "footstepSound" : "/sfx/blocks/footstep_dirt.wav",
+  "health" : 1
+}
