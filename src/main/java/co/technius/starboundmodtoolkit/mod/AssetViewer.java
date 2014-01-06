@@ -53,6 +53,7 @@ public class AssetViewer extends BorderPane
 				case OBJECT: jap = new ObjectAssetPane(ja); break;
 				case RECIPE: jap = new RecipeAssetPane(ja); break;
 				case ITEM: jap = new ItemAssetPane(ja); break;
+				case MATERIAL_ITEM: jap = new MatItemAssetPane(ja); break;
 				case CONSUMABLE: jap = new ConsumableAssetPane(ja); break;
 				case CELESTIAL: jap = new CelestialAssetPane(ja); break;
 				default:
