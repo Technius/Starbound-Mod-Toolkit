@@ -1,7 +1,7 @@
 Starbound-Mod-Toolkit
 =====================
 
-Tool used for creating mods for the game Starbound
+The Starbound Mod Toolkit (SMT) is a tool used for creating mods for the game Starbound. SMT is written in Java, and is therefore cross-platform.
 
 Starbound forums link: http://community.playstarbound.com/index.php?threads/starbound-mod-toolkit.60704/
 
@@ -19,5 +19,5 @@ If you haven't already, copy jfxrt.jar in your Java installation into the ext fo
 
 Run the following commands in the console:
   1. git clone https://github.com/Technius/Starbound-Mod-Toolkit.git
-  2. cd Starbound-Mod-Toolkit.git
+  2. cd Starbound-Mod-Toolkit
   2. mvn jfx:jar
