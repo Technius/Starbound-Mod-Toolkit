@@ -54,6 +54,7 @@ public enum AssetType
 	GRAPPLINGHOOK("grapplinghook", true),
 	ITEM_THROWN("thrownitem", true),
 	ITEM_TECH("techitem", true),
+	ITEM_CODEX("codexitem", true),
 	TECH("tech", true),
 	TERRAIN("terrain", true),
 	RIDGE_CAVE("ridgecave", true),
