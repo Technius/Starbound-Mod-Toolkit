@@ -1,5 +1,6 @@
 package co.technius.starboundmodtoolkit;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Level;
@@ -35,6 +36,7 @@ public class ModToolkit extends Application implements EventHandler<WindowEvent>
 	DataFiles data;
 	private static ModToolkit instance;
 	static String version;
+	ModToolkitMenu menu;
 	
 	public static void init(String[] args)
 	{
@@ -68,7 +70,7 @@ public class ModToolkit extends Application implements EventHandler<WindowEvent>
 		stage.setTitle("Starbound Mod Toolkit");
 		BorderPane root = new BorderPane();
 		
-		root.setTop(new ModToolkitMenu(this));
+		root.setTop((menu = new ModToolkitMenu(this)));
 		
 		tabs = new TabPane();
 		tabs.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -104,6 +106,8 @@ public class ModToolkit extends Application implements EventHandler<WindowEvent>
 		}
 		Path r = data.getMostRecentFile();
 		if(r != null)dirChooser.setInitialDirectory(r.getParent().toFile());
+		File f = data.getLastExportPath();
+		if(f != null)menu.exportDialog.setInitialDirectory(f.getParentFile());
 		
 		stage.show();
 		stage.setOnCloseRequest(this);

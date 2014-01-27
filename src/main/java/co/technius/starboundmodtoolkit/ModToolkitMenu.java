@@ -1,8 +1,16 @@
 package co.technius.starboundmodtoolkit;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.logging.Level;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,6 +18,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import co.technius.starboundmodtoolkit.mod.Mod;
 import co.technius.starboundmodtoolkit.utilui.MessageDialog;
 
@@ -19,13 +29,16 @@ public class ModToolkitMenu extends MenuBar implements EventHandler<ActionEvent>
 	MenuItem newm = new MenuItem("New");
 	MenuItem open = new MenuItem("Open");
 	MenuItem copyto = new MenuItem("Copy To");
+	MenuItem export = new MenuItem("Export");
 	MenuItem exit = new MenuItem("Exit");
 	MenuItem about = new MenuItem("About");
+	
+	FileChooser exportDialog = new FileChooser();
 	public ModToolkitMenu(ModToolkit main)
 	{
 		this.main = main;
 		Menu file = new Menu("File");
-		file.getItems().addAll(newm, open, copyto, exit);
+		file.getItems().addAll(newm, open, copyto, export, exit);
 		
 		Menu help = new Menu("Help");
 		help.getItems().addAll(about);
@@ -35,9 +48,13 @@ public class ModToolkitMenu extends MenuBar implements EventHandler<ActionEvent>
 		newm.setOnAction(this);
 		open.setOnAction(this);
 		copyto.setOnAction(this);
+		export.setOnAction(this);
 		exit.setOnAction(this);
 		
 		about.setOnAction(this);
+		
+		exportDialog.setTitle("Select mod export destination");
+		exportDialog.getExtensionFilters().add(new ExtensionFilter("ZIP archive", "*.zip"));
 	}
 	
 	public void handle(ActionEvent event) 
@@ -112,6 +129,48 @@ public class ModToolkitMenu extends MenuBar implements EventHandler<ActionEvent>
 				}
 			}
 			else MessageDialog.showMessageDialog(main.stage, "Please select a mod.");
+		}
+		else if(event.getSource() == export)
+		{
+			Tab selection = main.mods.getSelectionModel().getSelectedItem();
+			if(selection != null)
+			{
+				File selected = exportDialog.showSaveDialog(main.stage);
+				if(selected != null)
+				{
+					final Path path = selected.toPath();
+					main.data.setLastExportPath(path);
+					ModPane mp = (ModPane) selection.getContent();
+					final Path dir = mp.mod.getSourceFolder();
+					try
+					{
+						final ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(selected));
+						Files.walkFileTree(dir, new SimpleFileVisitor<Path>(){
+							public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+									throws IOException
+							{
+								String r = dir.relativize(file).toString();
+								ZipEntry ent = new ZipEntry(r);
+								zos.putNextEntry(ent);
+								Files.copy(file, zos);
+								zos.closeEntry();
+								return FileVisitResult.CONTINUE;
+							}
+						});
+						zos.flush();
+						zos.close();
+						ModToolkit.log.info("Exported \"" + mp.mod.getName() + " to " + path.toString());
+						MessageDialog.showMessageDialog(main.stage, 
+							"Export complete!", "Starbound Mod Toolkit");
+					}
+					catch(Throwable t)
+					{
+						Util.handleError(t, "An error was encountered while exporting \"" 
+							+ mp.mod.getName()+ "\" to " + selected.getAbsolutePath(), 
+							"Failed to export mod");
+					}
+				}
+			}
 		}
 		else if(event.getSource() == exit)
 			main.requestClose();

@@ -1,5 +1,6 @@
 package co.technius.starboundmodtoolkit;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -86,6 +87,18 @@ public class DataFiles
 			recentFiles.set(0, val);
 		}
 		else recentFiles.add(val);
+	}
+	
+	public File getLastExportPath()
+	{
+		JsonValue v = baseData.get("lastExport");
+		if(v == null)return null;
+		return new File(v.asString());
+	}
+	
+	public void setLastExportPath(Path path)
+	{
+		baseData.set("lastExport", path.toAbsolutePath().toString());
 	}
 	
 	public Path getMostRecentFile()
