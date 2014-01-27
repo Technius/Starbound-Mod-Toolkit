@@ -30,7 +30,7 @@ public class ModPropertiesPane extends GridPane
 		Label lversions = new Label("Game Version");
 		GridPane.setConstraints(lversions, 0, 1);
 		getChildren().add(lversions);
-		gameVersions.setValue("Beta v. Angry Koala");
+		gameVersions.setValue(gameVersions.getItems().get(0));
 		GridPane.setConstraints(gameVersions, 1, 1);
 		getChildren().add(gameVersions);
 		GridPane advp = new GridPane();
