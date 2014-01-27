@@ -142,6 +142,8 @@ public enum AssetType
 	public boolean isOfType(String fname)
 	{
 		if(fileExtension == null)return false;
-		return fname.endsWith(fileExtension);
+		int i = fname.lastIndexOf('.');
+		if(i == -1)return false;
+		return fname.substring(i).equalsIgnoreCase("." + fileExtension);
 	}
 }
