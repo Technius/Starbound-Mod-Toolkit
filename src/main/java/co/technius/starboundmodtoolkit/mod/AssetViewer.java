@@ -57,7 +57,9 @@ public class AssetViewer extends BorderPane
 				case CONSUMABLE: jap = new ConsumableAssetPane(ja); break;
 				case CELESTIAL: jap = new CelestialAssetPane(ja); break;
 				default:
-					jap = new JsonAssetPane(ja);
+					if(asset.path.toString().endsWith(".modinfo"))
+						jap = new ModInfoAssetPane(ja);
+					else jap = new JsonAssetPane(ja);
 				}
 				jap.load();
 				p = jap;

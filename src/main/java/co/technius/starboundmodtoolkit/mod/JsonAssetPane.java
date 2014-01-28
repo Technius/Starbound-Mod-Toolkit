@@ -343,7 +343,7 @@ public class JsonAssetPane extends AssetPane
 			}
 			else if(!val.isObject())
 				throw new IllegalArgumentException("Expected JsonObject; got " + val.getClass().getSimpleName());
-			base = (JsonObject)val;
+			else base = (JsonObject)val;
 		}
 		return base;
 	}

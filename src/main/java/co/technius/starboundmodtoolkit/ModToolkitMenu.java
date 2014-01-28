@@ -61,7 +61,7 @@ public class ModToolkitMenu extends MenuBar implements EventHandler<ActionEvent>
 	{
 		if(event.getSource() == newm)
 		{
-			main.modPropDiag.loadAndShow(null);
+			main.modPropDiag.show();
 		}
 		else if(event.getSource() == open)
 		{

@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
+import co.technius.starboundmodtoolkit.GameVersion;
 import co.technius.starboundmodtoolkit.JsonConstants.Race;
 import co.technius.starboundmodtoolkit.JsonConstants.Rarity;
 import co.technius.starboundmodtoolkit.util.AndBoolean;
@@ -55,5 +56,12 @@ public class AssetPaneUtils
 		bool.register(iV);
 		c.textProperty().addListener(iV);
 		return iV;
+	}
+	
+	public static ComboBox<String> gameVersionComboBox()
+	{
+		ComboBox<String> gameVersions = new ComboBox<String>(GameVersion.getVersionStrings());
+		gameVersions.setValue(gameVersions.getItems().get(0));
+		return gameVersions;
 	}
 }

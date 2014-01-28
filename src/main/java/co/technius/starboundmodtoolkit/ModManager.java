@@ -19,7 +19,8 @@ public class ModManager
 		ModInfo info;
 		try
 		{
-			info = new ModInfo(object);
+			info = new ModInfo(modinfo, object);
+			info.setSource(path);
 		}
 		catch(IllegalArgumentException iae)
 		{
@@ -39,7 +40,7 @@ public class ModManager
 		if(Files.notExists(path))
 			Files.createDirectory(dir);
 		ModInfo info = mod.getInfo();
-		Util.writeJsonToFile(info.toJson(), dir.resolve(info.getName() + ".modinfo"));
+		Util.writeJsonToFile(info.getObject(), dir.resolve(info.getName() + ".modinfo"));
 		Path assetPath = mod.getAssetFolder();
 		for(Asset a: mod.getAssets())
 		{

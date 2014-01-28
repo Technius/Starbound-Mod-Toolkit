@@ -30,7 +30,7 @@ public class ModToolkit extends Application implements EventHandler<WindowEvent>
 	TabPane tabs;
 	ModsPane mods;
 	ModManager modman;
-	ModPropertiesDialog modPropDiag;
+	ModCreateDialog modPropDiag;
 	DirectoryChooser dirChooser;
 	FileChooser fileChooser;
 	DataFiles data;
@@ -62,7 +62,7 @@ public class ModToolkit extends Application implements EventHandler<WindowEvent>
 	{
 		instance = this;
 		this.stage = stage;
-		modPropDiag = new ModPropertiesDialog(this);
+		modPropDiag = new ModCreateDialog(this);
 		fileChooser = new FileChooser();
 		dirChooser = new DirectoryChooser();
 		modman = new ModManager();
