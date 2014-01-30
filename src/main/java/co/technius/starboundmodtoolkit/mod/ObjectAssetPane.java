@@ -31,6 +31,9 @@ public class ObjectAssetPane extends JsonAssetPane
 	
 	public ComboBox<Race> race = AssetPaneUtils.raceBox();
 	
+	@JsonObjectBinding(key = "category", type = Type.STRING)
+	public TextField category = new TextField();
+	
 	@JsonObjectBinding(key = "printable", type = Type.BOOLEAN)
 	public CheckBox printable = new CheckBox();
 	
@@ -68,6 +71,7 @@ public class ObjectAssetPane extends JsonAssetPane
 		form.add("Rarity", rarity, new Label("Required"));
 		form.add("Description", description);
 		form.add("Race", race, new Label("Required"));
+		form.add("Category", category);
 		form.add("Printable", printable);
 		Label priceValidity = new Label("Must be a number");
 		AssetPaneUtils.addWholeNumberListener(priceValidity, price, enable).acceptNegative = false;
