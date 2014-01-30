@@ -13,7 +13,7 @@ The source code is licensed under the LGPLv3.  You may use and distribute the ex
 
 Compiling
 ---------
-Requirements: Maven 3, Java 7 Update 9 or higher
+Requirements: Git, Maven 3, Java 7 Update 9 or higher
 
 If you haven't already, copy jfxrt.jar in your Java installation into the ext folder. Don't do anything if jfxrt.jar is already in the ext folder.
 
