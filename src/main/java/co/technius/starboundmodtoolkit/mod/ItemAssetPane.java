@@ -77,17 +77,6 @@ public class ItemAssetPane extends JsonAssetPane
 	
 	public void loadCustom()
 	{
-		JsonValue rarityVal = asset.object.get("rarity");
-		if(rarityVal != null && rarityVal.isString())
-		{
-			String rarity = rarityVal.asString();
-			for(Rarity r: Rarity.values())
-			{
-				if(r.toString().equals(rarity))
-					this.rarity.getSelectionModel().select(r);
-			}
-		}
-		else rarity.getSelectionModel().clearSelection();
 		JsonValue twoHandedVal = asset.object.get("twoHanded");
 		if(twoHandedVal != null && twoHandedVal.isBoolean())
 			twoHanded.setSelected(twoHandedVal.asBoolean());

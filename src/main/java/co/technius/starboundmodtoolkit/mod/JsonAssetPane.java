@@ -204,13 +204,14 @@ public class JsonAssetPane extends AssetPane
 			{
 				validateType(key, val, Type.STRING);
 				ComboBox<?> cbox = (ComboBox<?>) obj;
+				cbox.getSelectionModel().clearSelection();
 				try
 				{
 					ObservableList<?> items = cbox.getItems();
 					for(int i = 0; i < items.size(); i ++)
 					{
 						Object o = items.get(i);
-						if(o.toString().equals(val))
+						if(o.toString().equals(val.asString()))
 							cbox.getSelectionModel().select(i);
 					}
 				}
