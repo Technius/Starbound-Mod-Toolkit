@@ -1,0 +1,10 @@
+{
+  "codexId" : "uniqueid",
+  "title" : "Codex title",
+  "inventoryIcon" : "test.png",
+  "codexkind" : "codex",
+  "itemName" : "uniqueidCodex",
+  "rarity" : "Common",
+  "description" : "A codex item in the inventory",
+  "shortdescription" : "Item name"
+}

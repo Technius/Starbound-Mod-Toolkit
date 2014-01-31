@@ -1,0 +1,7 @@
+{
+  "id" : "uniqueid",
+  "title" : "Codex Title",
+  "contentPages" : [
+    "Example page"
+  ]
+}
