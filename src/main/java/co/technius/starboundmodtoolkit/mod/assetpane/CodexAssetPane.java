@@ -151,7 +151,7 @@ public class CodexAssetPane extends JsonAssetPane implements EventHandler<Action
 		{
 			if(size > 1)pageSlider.setMajorTickUnit(size - 1);
 			else pageSlider.setMajorTickUnit(size);
-			if(size > 2)pageSlider.setMinorTickCount(size - 1);
+			if(size > 2)pageSlider.setMinorTickCount(size - 2);
 			else pageSlider.setMinorTickCount(0);
 		}
 		else
