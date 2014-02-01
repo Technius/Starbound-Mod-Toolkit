@@ -1,4 +1,4 @@
-package co.technius.starboundmodtoolkit.mod;
+package co.technius.starboundmodtoolkit.mod.assetpane;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -14,7 +14,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import co.technius.starboundmodtoolkit.mod.JsonObjectBinding.Type;
+import co.technius.starboundmodtoolkit.mod.JsonAsset;
+import co.technius.starboundmodtoolkit.mod.assetpane.JsonObjectBinding.Type;
 
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonValue;
@@ -70,7 +71,7 @@ public class CodexAssetPane extends JsonAssetPane implements EventHandler<Action
 	public void loadCustom()
 	{
 		pages.getChildren().clear();
-		JsonArray cpages = asset.object.get("contentPages").asArray();
+		JsonArray cpages = asset.getObject().get("contentPages").asArray();
 		if(cpages.size() == 0)
 			pages.getChildren().add(AssetPaneUtils.noLinesTextArea());
 		else
@@ -97,7 +98,7 @@ public class CodexAssetPane extends JsonAssetPane implements EventHandler<Action
 		JsonArray a = new JsonArray();
 		for(Node n: pages.getChildren())
 			a.add(((TextArea)n).getText());
-		asset.object.set("contentPages", a);
+		asset.getObject().set("contentPages", a);
 	}
 	
 	private void selectPage(int pagenum)

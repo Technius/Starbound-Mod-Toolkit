@@ -28,6 +28,11 @@ public class Asset
 		this.type = type;
 	}
 	
+	public AssetType getType()
+	{
+		return type;
+	}
+	
 	public String toString()
 	{
 		return path.toString();

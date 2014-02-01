@@ -1,6 +1,4 @@
-package co.technius.starboundmodtoolkit.mod;
-
-import com.eclipsesource.json.JsonValue;
+package co.technius.starboundmodtoolkit.mod.assetpane;
 
 import javafx.geometry.VPos;
 import javafx.scene.control.Accordion;
@@ -13,7 +11,8 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
 import co.technius.starboundmodtoolkit.JsonConstants.Race;
 import co.technius.starboundmodtoolkit.JsonConstants.Rarity;
-import co.technius.starboundmodtoolkit.mod.JsonObjectBinding.Type;
+import co.technius.starboundmodtoolkit.mod.JsonAsset;
+import co.technius.starboundmodtoolkit.mod.assetpane.JsonObjectBinding.Type;
 
 public class ObjectAssetPane extends JsonAssetPane
 {
@@ -90,47 +89,5 @@ public class ObjectAssetPane extends JsonAssetPane
 		Label d = new Label("Inspection Descriptions");
 		form.add(d, speciesDescriptions);
 		GridPane.setValignment(d, VPos.TOP);
-	}
-	
-	@Override
-	public void saveCustom()
-	{
-		Race r = race.getValue();
-		if(r != Race.CUSTOM)
-			asset.object.set("race", r.toString());
-	}
-	
-	@Override
-	public void loadCustom()
-	{
-		JsonValue rarityVal = asset.object.get("rarity");
-		if(rarityVal != null && rarityVal.isString())
-		{
-			String rarity = rarityVal.asString();
-			for(Rarity r: Rarity.values())
-			{
-				if(r.toString().equals(rarity))
-					this.rarity.getSelectionModel().select(r);
-			}
-		}
-		else rarity.getSelectionModel().clearSelection();
-		
-		JsonValue raceVal = asset.object.get("race");
-		if(raceVal != null && raceVal.isString())
-		{
-			String race = raceVal.asString();
-			boolean c = false;
-			for(Race r: Race.values())
-			{
-				if(r.toString().equals(race))
-				{
-					this.race.getSelectionModel().select(r);
-					c = true;
-				}
-			}
-			if(!c)
-				this.race.getSelectionModel().select(Race.CUSTOM);
-		}
-		else race.getSelectionModel().clearSelection();
 	}
 }

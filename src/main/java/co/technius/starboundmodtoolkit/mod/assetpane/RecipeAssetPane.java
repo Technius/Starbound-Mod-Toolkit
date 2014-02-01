@@ -1,4 +1,4 @@
-package co.technius.starboundmodtoolkit.mod;
+package co.technius.starboundmodtoolkit.mod.assetpane;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +28,8 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import co.technius.starboundmodtoolkit.JsonConstants.CraftingGroups;
 import co.technius.starboundmodtoolkit.ModToolkit;
-import co.technius.starboundmodtoolkit.mod.JsonObjectBinding.Type;
+import co.technius.starboundmodtoolkit.mod.JsonAsset;
+import co.technius.starboundmodtoolkit.mod.assetpane.JsonObjectBinding.Type;
 import co.technius.starboundmodtoolkit.utilui.FormPane;
 
 import com.eclipsesource.json.JsonArray;
@@ -166,7 +167,7 @@ public class RecipeAssetPane extends JsonAssetPane implements EventHandler<Actio
 	{
 		usedGroups.clear();
 		unusedGroups.setAll(CraftingGroups.values());
-		JsonValue jGroups = asset.object.get("groups");
+		JsonValue jGroups = asset.getObject().get("groups");
 		if(jGroups != null && jGroups.isArray())
 		{
 			for(JsonValue v: (JsonArray) jGroups)
@@ -198,7 +199,7 @@ public class RecipeAssetPane extends JsonAssetPane implements EventHandler<Actio
 			ModToolkit.log.info(g.toString());
 			jGroups.add(g.toString());
 		}
-		asset.object.set("groups", jGroups);
+		asset.getObject().set("groups", jGroups);
 	}
 	
 	@SuppressWarnings("rawtypes")

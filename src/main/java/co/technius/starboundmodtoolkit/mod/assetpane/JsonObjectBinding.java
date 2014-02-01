@@ -1,4 +1,4 @@
-package co.technius.starboundmodtoolkit.mod;
+package co.technius.starboundmodtoolkit.mod.assetpane;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

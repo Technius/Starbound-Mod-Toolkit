@@ -1,11 +1,12 @@
-package co.technius.starboundmodtoolkit.mod;
+package co.technius.starboundmodtoolkit.mod.assetpane;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import co.technius.starboundmodtoolkit.JsonConstants.Rarity;
-import co.technius.starboundmodtoolkit.mod.JsonObjectBinding.Type;
+import co.technius.starboundmodtoolkit.mod.JsonAsset;
+import co.technius.starboundmodtoolkit.mod.assetpane.JsonObjectBinding.Type;
 
 public class CodexItemAssetPane extends JsonAssetPane
 {

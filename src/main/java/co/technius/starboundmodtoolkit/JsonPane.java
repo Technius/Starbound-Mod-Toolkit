@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import co.technius.starboundmodtoolkit.mod.JsonAssetPane;
+import co.technius.starboundmodtoolkit.mod.assetpane.JsonAssetPane;
 import co.technius.starboundmodtoolkit.utilui.MessageDialog;
 
 import com.eclipsesource.json.JsonObject;

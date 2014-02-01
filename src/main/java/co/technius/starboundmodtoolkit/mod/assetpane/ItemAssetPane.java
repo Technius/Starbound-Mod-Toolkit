@@ -1,4 +1,4 @@
-package co.technius.starboundmodtoolkit.mod;
+package co.technius.starboundmodtoolkit.mod.assetpane;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.CheckBox;
@@ -7,10 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import co.technius.starboundmodtoolkit.JsonConstants.Rarity;
-import co.technius.starboundmodtoolkit.mod.JsonObjectBinding.Type;
+import co.technius.starboundmodtoolkit.mod.JsonAsset;
+import co.technius.starboundmodtoolkit.mod.assetpane.JsonObjectBinding.Type;
 import co.technius.starboundmodtoolkit.utilui.TextFieldValidityListener;
-
-import com.eclipsesource.json.JsonValue;
 
 public class ItemAssetPane extends JsonAssetPane
 {
@@ -67,18 +66,5 @@ public class ItemAssetPane extends JsonAssetPane
 		};
 		maxStack.textProperty().addListener(tfvl);
 		enable.register(tfvl);
-	}
-	
-	public void saveCustom()
-	{
-		if(twoHanded.isSelected())asset.object.set("twoHanded", true);
-		else asset.object.remove("twoHanded");
-	}
-	
-	public void loadCustom()
-	{
-		JsonValue twoHandedVal = asset.object.get("twoHanded");
-		if(twoHandedVal != null && twoHandedVal.isBoolean())
-			twoHanded.setSelected(twoHandedVal.asBoolean());
 	}
 }

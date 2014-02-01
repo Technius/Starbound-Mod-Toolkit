@@ -19,9 +19,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import co.technius.starboundmodtoolkit.mod.AssetPaneUtils;
 import co.technius.starboundmodtoolkit.mod.Mod;
 import co.technius.starboundmodtoolkit.mod.ModInfo;
+import co.technius.starboundmodtoolkit.mod.assetpane.AssetPaneUtils;
 
 public class ModCreateDialog extends Stage implements EventHandler<ActionEvent>
 {

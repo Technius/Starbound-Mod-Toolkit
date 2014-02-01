@@ -1,4 +1,4 @@
-package co.technius.starboundmodtoolkit.mod;
+package co.technius.starboundmodtoolkit.mod.assetpane;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import co.technius.starboundmodtoolkit.Util;
+import co.technius.starboundmodtoolkit.mod.Asset;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -54,12 +55,12 @@ public class AssetPane extends TabPane
 			{
 				try 
 				{
-					Desktop.getDesktop().edit(asset.source.resolve(asset.path).toFile());
+					Desktop.getDesktop().edit(asset.getSource().resolve(asset.getPath()).toFile());
 				} 
 				catch (Throwable e)
 				{
 					Util.handleError(e, "An error occurred while opening the asset \""
-						+ asset.path.toFile() + "\" in the default editor",
+						+ asset.getPath().toFile() + "\" in the default editor",
 						"Failed to open default editor");
 				}
 			}
@@ -73,9 +74,9 @@ public class AssetPane extends TabPane
 	
 	public void update() throws IOException
 	{
-		Path assetPath = asset.source.resolve(asset.path);
+		Path assetPath = asset.getSource().resolve(asset.getPath());
 		path.setText(assetPath.toString());
 		size.setText(Files.size(assetPath) + " bytes");
-		type.setText(asset.type.name());
+		type.setText(asset.getType().name());
 	}
 }

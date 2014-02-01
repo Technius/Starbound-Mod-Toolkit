@@ -1,4 +1,4 @@
-package co.technius.starboundmodtoolkit.mod;
+package co.technius.starboundmodtoolkit.mod.assetpane;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -25,7 +25,8 @@ import javafx.scene.layout.HBox;
 import co.technius.starboundmodtoolkit.JsonPane;
 import co.technius.starboundmodtoolkit.ModToolkit;
 import co.technius.starboundmodtoolkit.Util;
-import co.technius.starboundmodtoolkit.mod.JsonObjectBinding.Type;
+import co.technius.starboundmodtoolkit.mod.JsonAsset;
+import co.technius.starboundmodtoolkit.mod.assetpane.JsonObjectBinding.Type;
 import co.technius.starboundmodtoolkit.util.AndBoolean;
 import co.technius.starboundmodtoolkit.utilui.FormPane;
 
@@ -93,7 +94,7 @@ public class JsonAssetPane extends AssetPane
 		jsonPane.jap = this;
 		asset = (JsonAsset) super.asset;
 		Tab json = new Tab("Raw JSON");
-		jsonPane.loadJson(asset.object);
+		jsonPane.loadJson(asset.getObject());
 		json.setContent(jsonPane);
 		getTabs().add(json);
 	}
@@ -115,7 +116,7 @@ public class JsonAssetPane extends AssetPane
 			Util.handleError(t, "An error occurred while loading asset data", 
 				"Failed to load JsonObject");
 		}
-		jsonPane.loadJson(asset.object);
+		jsonPane.loadJson(asset.getObject());
 	}
 	
 	public final void save()
@@ -136,7 +137,7 @@ public class JsonAssetPane extends AssetPane
 			Util.handleError(t, "An error occurred while editing asset data", 
 				"Failed to modify JsonObject");
 		}
-		jsonPane.loadJson(asset.object);
+		jsonPane.loadJson(asset.getObject());
 	}
 	
 	protected void loadCustom()
@@ -163,14 +164,14 @@ public class JsonAssetPane extends AssetPane
 			if(base == null)
 			{
 				if(b.required())throw new IllegalArgumentException("Invalid " 
-					+ asset.type.toString() + " file");
+					+ asset.getType().toString() + " file");
 				continue;
 			}
 			JsonValue val = base.get(key);
 			if(val == null)
 			{
 				if(b.required())
-					throw new IllegalArgumentException(asset.type.toString() + " file missing "
+					throw new IllegalArgumentException(asset.getType().toString() + " file missing "
 						+ "required key: " + key);
 				continue;
 			}
@@ -332,7 +333,7 @@ public class JsonAssetPane extends AssetPane
 	
 	private JsonObject getJsonFromBinding(JsonObjectBinding a, boolean create)
 	{
-		JsonObject base = asset.object;
+		JsonObject base = asset.getObject();
 		String[] keys = a.base();
 		for(String s: keys)
 		{

@@ -1,4 +1,4 @@
-package co.technius.starboundmodtoolkit.mod;
+package co.technius.starboundmodtoolkit.mod.assetpane;
 
 import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;

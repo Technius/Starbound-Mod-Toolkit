@@ -6,6 +6,17 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import co.technius.starboundmodtoolkit.ModToolkit;
 import co.technius.starboundmodtoolkit.Util;
+import co.technius.starboundmodtoolkit.mod.assetpane.AssetPane;
+import co.technius.starboundmodtoolkit.mod.assetpane.CelestialAssetPane;
+import co.technius.starboundmodtoolkit.mod.assetpane.CodexAssetPane;
+import co.technius.starboundmodtoolkit.mod.assetpane.CodexItemAssetPane;
+import co.technius.starboundmodtoolkit.mod.assetpane.ConsumableAssetPane;
+import co.technius.starboundmodtoolkit.mod.assetpane.ItemAssetPane;
+import co.technius.starboundmodtoolkit.mod.assetpane.JsonAssetPane;
+import co.technius.starboundmodtoolkit.mod.assetpane.MatItemAssetPane;
+import co.technius.starboundmodtoolkit.mod.assetpane.ModInfoAssetPane;
+import co.technius.starboundmodtoolkit.mod.assetpane.ObjectAssetPane;
+import co.technius.starboundmodtoolkit.mod.assetpane.RecipeAssetPane;
 
 public class AssetViewer extends BorderPane
 {
