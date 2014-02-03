@@ -31,7 +31,7 @@ public class ItemAssetPane extends JsonAssetPane
 	@JsonObjectBinding(key = "maxStack", type = Type.INTEGER)
 	public TextField maxStack = new TextField();
 	
-	@JsonObjectBinding(key = "twoHanded", type = Type.BOOLEAN)
+	@JsonObjectBinding(key = "twoHanded", type = Type.BOOLEAN, bool_def = false)
 	public CheckBox twoHanded = new CheckBox("Two Handed");
 	
 	public ItemAssetPane(JsonAsset asset)

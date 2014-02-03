@@ -15,6 +15,7 @@ public @interface JsonObjectBinding
 	Type type();
 	String[] keyBinding() default {};
 	Type[] valueBinding() default {};
+	boolean bool_def() default false;
 	
 	enum Type
 	{

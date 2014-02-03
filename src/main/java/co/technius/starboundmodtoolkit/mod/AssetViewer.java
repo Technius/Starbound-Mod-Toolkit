@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import co.technius.starboundmodtoolkit.ModToolkit;
 import co.technius.starboundmodtoolkit.Util;
 import co.technius.starboundmodtoolkit.mod.assetpane.AssetPane;
+import co.technius.starboundmodtoolkit.mod.assetpane.BackAssetPane;
 import co.technius.starboundmodtoolkit.mod.assetpane.CelestialAssetPane;
 import co.technius.starboundmodtoolkit.mod.assetpane.CodexAssetPane;
 import co.technius.starboundmodtoolkit.mod.assetpane.CodexItemAssetPane;
@@ -65,6 +66,7 @@ public class AssetViewer extends BorderPane
 				case RECIPE: jap = new RecipeAssetPane(ja); break;
 				case ITEM: jap = new ItemAssetPane(ja); break;
 				case ITEM_CODEX: jap = new CodexItemAssetPane(ja); break;
+				case BACK: jap = new BackAssetPane(ja); break;
 				case CODEX: jap = new CodexAssetPane(ja); break;
 				case MATERIAL_ITEM: jap = new MatItemAssetPane(ja); break;
 				case CONSUMABLE: jap = new ConsumableAssetPane(ja); break;

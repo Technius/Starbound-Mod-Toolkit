@@ -51,4 +51,14 @@ public class FormPane extends ScrollPane
 		grid.getChildren().addAll(nodes);
 		rowc ++;
 	}
+	
+	public void clear()
+	{
+		grid.getChildren().clear();
+	}
+	
+	public GridPane getGrid()
+	{
+		return grid;
+	}
 }

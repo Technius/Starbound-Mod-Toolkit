@@ -199,7 +199,8 @@ public class JsonAssetPane extends AssetPane
 			else if(obj instanceof CheckBox)
 			{
 				validateType(key, val, Type.BOOLEAN);
-				((CheckBox)obj).setSelected(base.get(key).asBoolean());
+				boolean v = base.get(key).asBoolean();
+				((CheckBox)obj).setSelected(v);
 			}
 			else if(obj instanceof ComboBox)
 			{
@@ -283,7 +284,9 @@ public class JsonAssetPane extends AssetPane
 			else if(obj instanceof CheckBox)
 			{
 				checkType(Type.BOOLEAN, b.type(), CheckBox.class);
-				base.set(key, ((CheckBox)obj).isSelected());
+				boolean v = ((CheckBox)obj).isSelected();
+				if(b.required() || (b.bool_def() != v))base.set(key, v);
+				else base.remove(key);
 			}
 			else if(obj instanceof ComboBox)
 			{

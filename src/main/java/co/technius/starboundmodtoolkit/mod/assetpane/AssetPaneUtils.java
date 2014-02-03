@@ -3,6 +3,7 @@ package co.technius.starboundmodtoolkit.mod.assetpane;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
@@ -63,5 +64,30 @@ public class AssetPaneUtils
 		ComboBox<String> gameVersions = new ComboBox<String>(GameVersion.getVersionStrings());
 		gameVersions.setValue(gameVersions.getItems().get(0));
 		return gameVersions;
+	}
+	
+	public static void updateSliderSize(int size, Slider slider)
+	{
+		slider.setMax(size);
+		if(size <= 10)
+		{
+			if(size > 1)slider.setMajorTickUnit(size - 1);
+			else slider.setMajorTickUnit(size);
+			if(size > 2)slider.setMinorTickCount(size - 2);
+			else slider.setMinorTickCount(0);
+		}
+		else
+		{
+			slider.setMajorTickUnit(10);
+			slider.setMinorTickCount(9);
+		}
+	}
+	
+	public static void setupOneIndexSlider(Slider slider)
+	{
+		slider.setBlockIncrement(1);
+		slider.setSnapToTicks(true);
+		slider.setShowTickMarks(true);
+		slider.setShowTickLabels(true);
 	}
 }
