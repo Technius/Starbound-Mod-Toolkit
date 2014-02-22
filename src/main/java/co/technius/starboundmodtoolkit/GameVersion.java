@@ -8,7 +8,8 @@ import javafx.collections.ObservableList;
 public enum GameVersion 
 {
 	BETA_ANGRY_KOALA("Beta v. Angry Koala"),
-	BETA_FURIOUS_KOALA("Beta v. Furious Koala");
+	BETA_FURIOUS_KOALA("Beta v. Furious Koala"),
+	BETA_ENRAGED_KOALA("Beta v. Enraged Koala");
 	private static ObservableList<String> versionStrings;
 	static
 	{
