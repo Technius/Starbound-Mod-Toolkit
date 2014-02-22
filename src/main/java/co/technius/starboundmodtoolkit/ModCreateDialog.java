@@ -101,7 +101,6 @@ public class ModCreateDialog extends Stage implements EventHandler<ActionEvent>
 			mod.setSourceFolder(p);
 			ModInfo info = mod.getInfo();
 			info.setSource(p);
-			main.mods.addModPaneAndFocus(mod);
 			
 			try 
 			{
@@ -113,6 +112,8 @@ public class ModCreateDialog extends Stage implements EventHandler<ActionEvent>
 				Util.handleError(e, "An error occurred while saving the .modinfo file", 
 					"Failed to save .modinfo");
 			}
+			
+			main.mods.addModPaneAndFocus(mod);
 			
 			close();
 		}
